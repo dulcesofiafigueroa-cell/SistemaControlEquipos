@@ -47,6 +47,38 @@ void registrarEquipo() {
     printf("Equipo registrado con exito\n");
 }
 
+void mostrarEquipos() {
+    FILE *archivo = fopen("equipos.txt", "r");
+
+    if (archivo == NULL) {
+        printf("No hay equipos registrados\n");
+        return;
+    }
+
+    Equipo e;
+
+    printf("\n===== LISTA DE EQUIPOS =====\n");
+
+    while (fscanf(archivo, "%[^|]|%[^|]|%[^|]|%[^|]|%[^|]|%f\n",
+        e.codigo,
+        e.nombre,
+        e.marca,
+        e.responsable,
+        e.estado,
+        &e.precio) != EOF) {
+
+        printf("\n----------------------\n");
+        printf("Codigo: %s\n", e.codigo);
+        printf("Nombre: %s\n", e.nombre);
+        printf("Marca: %s\n", e.marca);
+        printf("Responsable: %s\n", e.responsable);
+        printf("Estado: %s\n", e.estado);
+        printf("Precio: %.2f\n", e.precio);
+    }
+
+    fclose(archivo);
+}
+
 int main() {
     int opcion;
 
@@ -66,7 +98,7 @@ int main() {
                 registrarEquipo();
                 break;
             case 2:
-                printf("Mostrar equipos (fase siguiente)\n");
+                mostrarEquipos();
                 break;
             case 3:
                 printf("Buscar equipo (fase siguiente)\n");
