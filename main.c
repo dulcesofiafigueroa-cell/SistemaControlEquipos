@@ -11,6 +11,41 @@ typedef struct {
     float precio;
 } Equipo;
 
+void registrarEquipo() {
+    FILE *archivo = fopen("equipos.txt", "a");
+
+    if (archivo == NULL) {
+        printf("Error al abrir archivo\n");
+        return;
+    }
+
+    Equipo e;
+
+    printf("Codigo: ");
+    scanf("%s", e.codigo);
+
+    printf("Nombre: ");
+    scanf(" %[^\n]", e.nombre);
+
+    printf("Marca: ");
+    scanf(" %[^\n]", e.marca);
+
+    printf("Responsable: ");
+    scanf(" %[^\n]", e.responsable);
+
+    printf("Estado: ");
+    scanf(" %[^\n]", e.estado);
+
+    printf("Precio: ");
+    scanf("%f", &e.precio);
+
+    fprintf(archivo, "%s|%s|%s|%s|%s|%.2f\n",
+        e.codigo, e.nombre, e.marca, e.responsable, e.estado, e.precio);
+
+    fclose(archivo);
+
+    printf("Equipo registrado con exito\n");
+}
 
 int main() {
     int opcion;
@@ -28,7 +63,7 @@ int main() {
 
         switch(opcion) {
             case 1:
-                printf("Registrar equipo (fase siguiente)\n");
+                registrarEquipo();
                 break;
             case 2:
                 printf("Mostrar equipos (fase siguiente)\n");
