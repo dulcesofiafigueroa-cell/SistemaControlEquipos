@@ -79,6 +79,49 @@ void mostrarEquipos() {
     fclose(archivo);
 }
 
+void buscarEquipo() {
+    FILE *archivo = fopen("equipos.txt", "r");
+
+    if (archivo == NULL) {
+        printf("No hay equipos registrados\n");
+        return;
+    }
+
+    char codigoBuscado[20];
+    Equipo e;
+    int encontrado = 0;
+
+    printf("Ingrese codigo del equipo: ");
+    scanf("%s", codigoBuscado);
+
+    while (fscanf(archivo, "%[^|]|%[^|]|%[^|]|%[^|]|%[^|]|%f\n",
+        e.codigo,
+        e.nombre,
+        e.marca,
+        e.responsable,
+        e.estado,
+        &e.precio) != EOF) {
+
+        if (strcmp(e.codigo, codigoBuscado) == 0) {
+            printf("\n===== EQUIPO ENCONTRADO =====\n");
+            printf("Codigo: %s\n", e.codigo);
+            printf("Nombre: %s\n", e.nombre);
+            printf("Marca: %s\n", e.marca);
+            printf("Responsable: %s\n", e.responsable);
+            printf("Estado: %s\n", e.estado);
+            printf("Precio: %.2f\n", e.precio);
+
+            encontrado = 1;
+        }
+    }
+
+    if (!encontrado) {
+        printf("No existe ese equipo 😭\n");
+    }
+
+    fclose(archivo);
+}
+
 int main() {
     int opcion;
 
@@ -101,7 +144,7 @@ int main() {
                 mostrarEquipos();
                 break;
             case 3:
-                printf("Buscar equipo (fase siguiente)\n");
+                buscarEquipo();
                 break;
             case 4:
                 printf("Modificar equipo (fase siguiente)\n");
