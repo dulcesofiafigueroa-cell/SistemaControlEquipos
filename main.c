@@ -116,10 +116,104 @@ void buscarEquipo() {
     }
 
     if (!encontrado) {
-        printf("No existe ese equipo 😭\n");
+        printf("No existe ese equipo\n");
     }
 
     fclose(archivo);
+}
+
+void modificarEquipo() {
+    FILE *archivo = fopen("equipos.txt", "r");
+    FILE *temp = fopen("temp.txt", "w");
+
+    if (archivo == NULL || temp == NULL) {
+        printf("Error al abrir archivos\n");
+        return;
+    }
+
+    char codigoBuscado[20];
+    Equipo e;
+    int encontrado = 0;
+
+    printf("Ingrese codigo a modificar: ");
+    scanf("%s", codigoBuscado);
+
+    while (fscanf(archivo, "%[^|]|%[^|]|%[^|]|%[^|]|%[^|]|%f\n",
+        e.codigo, e.nombre, e.marca, e.responsable, e.estado, &e.precio) != EOF) {
+
+        if (strcmp(e.codigo, codigoBuscado) == 0) {
+            printf("\nNuevo nombre: ");
+            scanf(" %[^\n]", e.nombre);
+
+            printf("Nueva marca: ");
+            scanf(" %[^\n]", e.marca);
+
+            printf("Nuevo responsable: ");
+            scanf(" %[^\n]", e.responsable);
+
+            printf("Nuevo estado: ");
+            scanf(" %[^\n]", e.estado);
+
+            printf("Nuevo precio: ");
+            scanf("%f", &e.precio);
+
+            encontrado = 1;
+        }
+
+        fprintf(temp, "%s|%s|%s|%s|%s|%.2f\n",
+            e.codigo, e.nombre, e.marca, e.responsable, e.estado, e.precio);
+    }
+
+    fclose(archivo);
+    fclose(temp);
+
+    remove("equipos.txt");
+    rename("temp.txt", "equipos.txt");
+
+    if (encontrado)
+        printf("Equipo modificado\n");
+    else
+        printf("No se encontró el equipo\n");
+}
+
+void eliminarEquipo() {
+    FILE *archivo = fopen("equipos.txt", "r");
+    FILE *temp = fopen("temp.txt", "w");
+
+    if (archivo == NULL || temp == NULL) {
+        printf("Error al abrir archivos\n");
+        return;
+    }
+
+    char codigoBuscado[20];
+    Equipo e;
+    int encontrado = 0;
+
+    printf("Ingrese codigo a eliminar: ");
+    scanf("%s", codigoBuscado);
+
+    while (fscanf(archivo, "%[^|]|%[^|]|%[^|]|%[^|]|%[^|]|%f\n",
+        e.codigo, e.nombre, e.marca, e.responsable, e.estado, &e.precio) != EOF) {
+
+        if (strcmp(e.codigo, codigoBuscado) == 0) {
+            encontrado = 1;
+            continue;
+        }
+
+        fprintf(temp, "%s|%s|%s|%s|%s|%.2f\n",
+            e.codigo, e.nombre, e.marca, e.responsable, e.estado, e.precio);
+    }
+
+    fclose(archivo);
+    fclose(temp);
+
+    remove("equipos.txt");
+    rename("temp.txt", "equipos.txt");
+
+    if (encontrado)
+        printf("Equipo eliminado\n");
+    else
+        printf("No existe ese equipo\n");
 }
 
 int main() {
@@ -147,10 +241,10 @@ int main() {
                 buscarEquipo();
                 break;
             case 4:
-                printf("Modificar equipo (fase siguiente)\n");
+                modificarEquipo();
                 break;
             case 5:
-                printf("Eliminar equipo (fase siguiente)\n");
+                eliminarEquipo();
                 break;
             case 6:
                 printf("Saliendo...\n");
